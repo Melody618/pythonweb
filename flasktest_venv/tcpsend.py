@@ -7,16 +7,16 @@ import numpy as np
 ser = serial.Serial()
 i = 0
 j = 0
-AmpMax = 20
-Amp1 = 10
-f1 = 60
-fs = 20000
-imax = 2048
+AmpMax = 20   #幅值上限
+Amp1 = 10     #幅值
+f1 = 60       #信号频率
+fs = 20000    #采样频率
+imax = 2048   #采样点数
 datalist=[]
  
 def port_open():
-    ser.port = "com4"            #设置端口号
-    ser.baudrate = 115200     #设置波特率
+    ser.port = "com4"       #设置端口号
+    ser.baudrate = 115200   #设置波特率
     ser.bytesize = 8        #设置数据位
     ser.stopbits = 1        #设置停止位
     ser.parity = "N"        #设置校验位
@@ -57,11 +57,11 @@ if __name__ == "__main__":
 	i = 0
 	while (i<imax):
 		i = i + 1
-		value = Amp1/AmpMax*np.sin(2*np.pi*f1*i/fs)*np.power(2,14)+np.power(2,14)
+		value = Amp1/AmpMax*np.sin(2*np.pi*f1*i/fs)*np.power(2,14)+np.power(2,14) #加偏置
 		value = value.astype(int)
 		data = struct.pack('>l',value)
 		ser.write(data)
 	print('发送成功')
-	while True:
+	while True: #这里是不是可以删掉
 		j = j+1
 	#port_close()
