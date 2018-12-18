@@ -16,19 +16,20 @@ def tcplink():
 	sock, addr = s.accept()
 	wave = ()
 	i = 0
-	print(1)
+	#print(1)
 	while i<N:
 		i = i+1
 		print(i)
 		msg = sock.recv(4)
 		print(msg)
-		if (len(msg) == 4):
+		if (len(msg) == 4): #如果出现丢包，用上一个数据代替这一个数据。doesn't work.
 			value = struct.unpack('>l',msg)
 			last_msg = msg
 		else:
 			value = struct.unpack('>l',last_msg)			
 		print(value)
 		wave = wave+value
+	#fft	
 	f = abs(np.fft.fft(wave))
 	t = np.arange(N)
 	freq = np.fft.fftfreq(t.shape[-1])
@@ -50,11 +51,5 @@ def tcplink():
 	s.close()
 	
 	
-	
-
-
-
-		
-
 t = threading.Thread(target = tcplink, args = ())
 t.start()
